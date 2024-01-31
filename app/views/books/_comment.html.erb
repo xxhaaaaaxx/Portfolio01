@@ -1,0 +1,28 @@
+<!-- パーシャル：コメント一覧表記 -->
+<h2>コメント一覧</h2>
+
+
+
+<div class="commentarea">
+    <table>
+        <tbody>
+            <% book.book_comments.each do |book_comment| %>
+                <tr>
+                    <td>
+                        <%= link_to user_path(book_comment.user) do %>
+                            <%= book_comment.user.name %>
+                        <% end %>
+                    </td>
+                    <td><%= book_comment.comment %></td>
+                    <td>
+                        <% if book_comment.user == current_user %>
+                        <%= link_to "削除", book_book_comment_path(book, book_comment), method: :delete, class: "btn btn-sm btn-danger float-end" %>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+
+    <%= render "book_comments/form", book: @book, book_comment: @book_comment %>
+</div>

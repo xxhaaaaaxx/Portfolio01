@@ -1,0 +1,82 @@
+<h1>書籍詳細</h1>
+
+<%= link_to '書籍一覧にもどる', books_path %>
+
+<table style="width: 800px;">
+<!-- テーブル幅指定 見づらいんだもん… -->
+    <tbody>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:id) %></th>
+            <td><%= @book.id %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:isbn) %></th>
+            <td><%= @book.isbn %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:ndc) %></th>
+            <td><%= @book.ndc %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:name) %></th>
+            <td><%= @book.name %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:auther) %></th>
+            <td><%= @book.auther %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:price) %></th>
+            <td><%= @book.price %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:publisher) %></th>
+            <td><%= @book.publisher %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:published) %></th>
+            <td><%= @book.published %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:reviewrd_user) %></th>
+            <td><%= @book.user.name %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:created_at) %></th>
+            <td><%= @book.created_at %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:updated_at) %></th>
+            <td><%= @book.updated_at %></td>
+        </tr>
+
+        <tr>
+            <th><%= Book.human_attribute_name(:notes) %></th>
+            <td><%= @book.notes %></td>
+        </tr>
+
+    </tbody>
+</table>
+
+
+
+<%= render partial: 'comment', locals: { book: @book } %>
+<!-- パーシャル：コメント一覧 -->
+
+<% if @book.user == @current_user %>
+    <%= link_to '編集', edit_book_path %>
+    <!-- 編集ボタン -->
+    <%= link_to '削除', @book, method: :delete, data: {confirm: "削除しますか？"} %>
+    <!-- 削除ボタン -->
+<% end %>

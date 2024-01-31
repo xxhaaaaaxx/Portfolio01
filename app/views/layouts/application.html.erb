@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BookManager</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <%= csrf_meta_tags %>
+
+  </head>
+
+  <body>
+    <div class="base">
+
+      <ul class="menu"><!-- メニュー -->
+        <% if current_user %>
+          <li><%= link_to '書籍一覧', books_path %></li>
+          <li><%= link_to 'ユーザー一覧', users_path %></li>
+          <li><%= link_to 'ログアウト', logout_path, method: :delete %></li>
+        <% else %>
+          <li><%= link_to 'ログイン', login_path %></li>
+        <% end %>
+      </ul>
+
+      <div class="text">
+        <% if current_user %>
+          <%= "現在『#{current_user.name}』でログインしています" %>
+        <% else %>
+          <%= "ログインしてください" %>
+        <% end %> 
+        
+        <%= yield %>
+      </div>
+
+    </div> 
+  </body>
+</html>
