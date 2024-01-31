@@ -1,24 +1,124 @@
-# README
+# README 書籍管理アプリケーション「BookManager」
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## ■制作背景
+書籍を大量に所持しているため、管理目録を作りたいと常々思っていた。   
+当初はExcelでの作成を考えていたが、アプリケーションとして書籍を登録・管理できるものがあればより便利だと思い、Webアプリケーション開発経験を積むためにもWAFであるRuby on Railsを用いて作成することにした。
 
-Things you may want to cover:
 
-* Ruby version
+## ■開発環境
+* プラットフォーム   
+Linux   
+Ubuntu 22.04
 
-* System dependencies
+* 言語    
+Ruby ver.2.7.2
 
-* Configuration
+* フレームワーク  
+Ruby on Rails ver.5.2.1
 
-* Database creation
+## 機能・実装状況
 
-* Database initialization
+|要件| |詳細|実装状況|
+|:----|:----|:----|:----|
+|書籍情報|登録|ログインユーザーは書籍情報の登録ができる|○|
+| |内容|投稿には画像と文章が含まれる|△|
+| |関連付け|書籍情報と登録ユーザーは紐づけられる|○|
+| |削除|登録したユーザーのみ削除できる|○|
+| |コメントの投稿| |○|
+|ユーザー情報|登録|ログインユーザーは書籍情報の登録ができる|○|
+| |内容|投稿には画像と文章が含まれる|△|
+| |関連付け|登録ユーザーと書籍情報は紐づけられる|○|
+| |削除|登録したユーザーのみ削除できる|○|
+|認証|サインアップ(新規ユーザー登録)|ユーザーの新規登録ができる|○|
+| |ログイン・ログアウト|ログイン・ログアウト機能がある|○|
+|閲覧|書籍情報の閲覧|ログインユーザーのみ閲覧できる|○|
+| |表示順|最新のものは一覧の下部に追加されていく|○|
+| |日本語化|日本語化に対応している|○|
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+## 基本設計
+|設計の概要| |説明|
+|:----|:----|:----|
+|目的|ログインユーザー|ログインして書籍情報の閲覧・新規作成・編集・削除ができる|
+| |非ログインユーザー|サインアップによりログインして書籍情報の閲覧・新規作成・編集・削除ができる|
+|アーキテクチャ|フロントエンド|Ruby on Railsのviewとcontroller|
+| |バックエンド|Ruby on Railsのmodelとdetabase|
+| |データベース|SQLite|
+|データベース設計|booksテーブル|id(主キー), isbn, ndc, name, auther, price, publisher, published, notes, created_at, updated_at|
+| |usersテーブル|id(主キー), name, email, password_digest, created_at, updated_at|
+| |sessionsテーブル|id(主キー), username, email, password, password_confirmation, created_at, updated_at|
+|モジュールと機能|ユーザー認証モジュール|管理者のログイン・ログアウト、サインアップ|
+| |書籍管理モジュール|書籍情報の閲覧・新規作成・編集・削除|
+| |ユーザー管理モジュール|ユーザー情報の閲覧・新規作成・編集・削除|
+|セキュリティ|パスワード保存|パスワードはハッシュ化して保存する|
+| |CSRF対策|トークン生成・埋め込み|
+|画面遷移|ログインユーザー|【book】一覧・詳細・新規・編集|
+| | |【user】一覧・詳細・新規・編集|
+| | |【session】ログイン|
+| |非ログインユーザー|【book】なし|
+| | |【user】なし|
+| | |【session】ログイン|
 
-* Deployment instructions
+## ER図
+![ER](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/7e8cc074-0cdc-407d-97af-672c85d4547e)
 
-* ...
+## スクリーンショット
+### ログイン画面
+![login](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/35329329-1679-45b5-b5b3-b8727499ee88)
+* メールアドレスとパスワードを入力することでログインできる
+* 入力値が合致しなかった場合このページにリダイレクトされる(URLを直打ちしても同様)
+* 新規ユーザー登録をクリックでユーザー新規登録画面(users/new)に遷移する
+
+
+### 書籍一覧
+![book_index](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/41bf3ee4-45f1-42f5-8e85-558be93a08d4)
+* 現在のログインユーザーを表示している(全ページ共通)
+* 表は互い違いに塗り潰しされる
+* 書籍名をクリックで書籍詳細画面(books/show)に遷移する
+* 備考は30文字以降が省略表示される
+* 編集・削除ボタンは登録者が現在ログインしているユーザーの時のみ表示される
+
+
+### 書籍新規登録
+![book_new](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/5db3e217-e258-4448-b439-8e659f2f02c3)
+* 分類は日本十進分類法(NDC)・網目表でセレクトボックス式になっている
+* imageファイルを選択していれば書籍詳細画面の最上段に表示される(現在実装が不完全)
+* 備考欄は時数無制限だが、書籍一覧画面(books/index)に表示されるのは30文字まで
+
+
+### 書籍詳細
+![book_show](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/33341200-f43d-4b37-bf2d-d5f6faae9fe2)
+* コメントおよび投稿者は投稿した順に下へ追加されていく
+* 書籍の編集・削除ボタン及びコメントの削除ボタンは投稿者にのみ表示される
+* コメントの投稿者名をクリックするとユーザー詳細画面(users/show)へと遷移する
+* 投稿時に画像を設定していれば最上段に画像が表示される(現在実装が不完全)
+
+
+### 書籍情報編集
+![book_edit](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/67bff926-090b-4208-9489-b97e48fb3bd6)
+* すでに入力されている内容はそのまま反映される
+
+
+### ユーザー一覧
+![user_index](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/2900c120-c30e-4804-8fbf-7cf7654e2646)
+* 編集・削除ボタンは登録者が現在ログインしているユーザーの時のみ表示される
+* パスワードは暗号化して表示するため閲覧不可能である
+* ユーザー名をクリックすることでユーザー詳細画面(users/show)へと遷移する
+
+
+### ユーザー新規登録
+![user_new](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/e9e911ac-b2b4-4b06-8b5f-283e1cdf8238)
+* パスワードとパスワード(確認用)が一致していない場合のフラッシュメッセージを表示させる予定
+
+### ユーザー詳細
+![user_show](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/944ecddf-48ea-4e3d-a559-bae73ec08c86)
+* 編集・削除ボタンは登録者が現在ログインしているユーザーの時のみ表示される
+
+### ユーザー情報編集
+![user_edit](https://github.com/xxhaaaaaxx/Portfolio01/assets/158167225/8920df14-150a-41d9-9fa1-c1434b42dfdd)
+
+
+## ■反省点・改善点(2024/1/31時点)
+* なるべくシンプルかつミニマル、画面遷移の動作もストレスにならないものを目指した結果、ユーザービリティの配慮が足りず最低限の体裁しか保っていない。フラッシュメッセージ表示、検索機能の実装、導入したBootstrapを活用するなどしたほうがよかった。スマートフォンなど小さな画面での閲覧を一切考えておらずレスポンシブタイプのレの字もない作りである。   
+* 前述の反省点にも関わることだが、フレームワークとはいえコードの可読性に欠ける。習作とはいえ業務で使用することを目標として練習している以上、多人数での開発というシチュエーションを念頭に置いておくべきだった。    
+* 圧倒的にRuby on Railsの知識が不足しており、作成中に何度ももどかしい思いをした。もっと開発経験を積む必要がある。
