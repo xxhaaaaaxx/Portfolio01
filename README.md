@@ -41,7 +41,7 @@ Ruby on Rails ver.5.2.1
 |:----|:----|:----|
 |目的|ログインユーザー|ログインして書籍情報の閲覧・新規作成・編集・削除ができる|
 | |非ログインユーザー|サインアップによりログインして書籍情報の閲覧・新規作成・編集・削除ができる|
-|アーキテクチャ|フロントエンド|Ruby on Railsのviewとcontroller|
+|アーキテクチャ|フロントエンド|Ruby on Railsのviewとcontroller, Bootstrap 5.1.0|
 | |バックエンド|Ruby on Railsのmodelとdetabase|
 | |データベース|SQLite|
 |データベース設計|booksテーブル|id(主キー), isbn, ndc, name, auther, price, publisher, published, notes, created_at, updated_at|
